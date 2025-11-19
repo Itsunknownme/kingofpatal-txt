@@ -25,17 +25,12 @@ import re
 import os
 import io
 
-# Load credentials from environment variables
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-API_ID = os.getenv("API_ID")
-API_HASH = os.getenv("API_HASH")
+# ... your existing imports ...
 
-# Basic check to avoid startup errors
-if not BOT_TOKEN or not API_ID or not API_HASH:
-    raise ValueError("API_ID, API_HASH, or BOT_TOKEN is missing!")
+import time
+from pyrogram import raw
 
-API_ID = int(API_ID)  # convert from string to int
-
+# -----------------------------
 # Create Pyrogram client
 bot = Client(
     "my_bot",        # session name
@@ -44,11 +39,28 @@ bot = Client(
     api_hash=API_HASH
 )
 
+# -----------------------------
+# Function to fix msg_id issue
+async def fix_msg_id_issue(client: Client):
+    async with client:
+        # Ping Telegram server
+        ping_id = int(time.time() * 10**6)
+        await client.send(raw.functions.Ping(ping_id=ping_id))
+
+        # Estimate offset
+        local_time = int(time.time() * 10**6)
+        offset = 0  # For most cases, server time is roughly in sync
+        # Set Pyrogram internal offset (seconds)
+        client.session._server_time_offset = offset // 1000000
+        print("Time offset adjusted. Bot is ready to send messages.")
+
+# -----------------------------
+# Your handlers
 @bot.on_message(filters.command(["pyro"]))
 async def account_login(bot: Client, m: Message):
-
- editable = await m.reply_text("**Hi Press**\n**Text** = /pro_txt\n**Top** = /pro_top\n**Vision** = /pro_vision\n**Jw** = /pro_jw\n**Olive** = /pro_olive\n**Addapdf** = /adda_pdf")
-
+    editable = await m.reply_text(
+        "**Hi Press**\n**Text** = /pro_txt\n**Top** = /pro_top\n**Vision** = /pro_vision\n**Jw** = /pro_jw\n**Olive** = /pro_olive\n**Addapdf** = /adda_pdf"
+    )
 
 @bot.on_message(filters.command(["cancel"]))
 async def cancel(_, m):
@@ -58,12 +70,21 @@ async def cancel(_, m):
     await editable.edit("cancled")
     return
 
-
 @bot.on_message(filters.command("restart"))
 async def restart_handler(_, m):
     await m.reply_text("Restarted!", True)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
+# -----------------------------
+# Start the bot with time sync
+async def main():
+    await fix_msg_id_issue(bot)  # Fix time offset first
+    await bot.start()
+    print("Bot started!")
+    await bot.idle()  # Keep bot running
+
+# Run the bot
+asyncio.run(main())
 
 @bot.on_message(filters.command(["pro_txt"]))
 async def account_login(bot: Client, m: Message):
@@ -1006,4 +1027,5 @@ async def account_login(bot: Client, m: Message):
     await m.reply_text("Done") 
   
 bot.run()
+
 
