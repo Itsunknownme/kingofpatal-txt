@@ -30,6 +30,11 @@ import io
 import time
 from pyrogram import raw
 
+# Get credentials from environment variables
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+API_ID = int(os.getenv("API_ID"))       # Must be an integer
+API_HASH = os.getenv("API_HASH")
+
 # -----------------------------
 # Create Pyrogram client
 bot = Client(
@@ -1027,5 +1032,6 @@ async def account_login(bot: Client, m: Message):
     await m.reply_text("Done") 
   
 bot.run()
+
 
 
