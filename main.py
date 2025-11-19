@@ -13,6 +13,7 @@ from p_bar import progress_bar
 from subprocess import getstatusoutput
 import helper
 import logging
+import sync_time
 import time
 import glob
 import aiohttp
@@ -1005,3 +1006,4 @@ async def account_login(bot: Client, m: Message):
     await m.reply_text("Done") 
   
 bot.run()
+
