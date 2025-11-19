@@ -24,7 +24,7 @@ import re
 import os
 import io
 
-API_ID =
+API_ID = 0  # Use 0 instead of leaving it empty
 API_HASH = ""
 BOT_TOKEN = ""
 bot = Client(
@@ -997,4 +997,5 @@ async def account_login(bot: Client, m: Message):
  
     
 bot.run()
+
 
