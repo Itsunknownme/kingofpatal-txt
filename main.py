@@ -24,11 +24,20 @@ import re
 import os
 import io
 
-API_ID = 0  # Use 0 instead of leaving it empty
-API_HASH = ""
-BOT_TOKEN = ""
+# Load credentials from environment variables
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+API_ID = os.getenv("API_ID")
+API_HASH = os.getenv("API_HASH")
+
+# Basic check to avoid startup errors
+if not BOT_TOKEN or not API_ID or not API_HASH:
+    raise ValueError("API_ID, API_HASH, or BOT_TOKEN is missing!")
+
+API_ID = int(API_ID)  # convert from string to int
+
+# Create Pyrogram client
 bot = Client(
-    "bot",
+    "my_bot",        # session name
     bot_token=BOT_TOKEN,
     api_id=API_ID,
     api_hash=API_HASH
@@ -997,5 +1006,6 @@ async def account_login(bot: Client, m: Message):
  
     
 bot.run()
+
 
 
