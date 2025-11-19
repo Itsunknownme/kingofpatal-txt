@@ -24,9 +24,9 @@ import re
 import os
 import io
 
-API_ID = 22581733
-API_HASH = "1db7bdcf908100cc641c6a5276765c3d"
-BOT_TOKEN = "7839616256:AAF9uxk5RpB4UPwvcB0NyG-cGru9URHTPQw"
+API_ID =
+API_HASH = ""
+BOT_TOKEN = ""
 bot = Client(
     "bot",
     bot_token=BOT_TOKEN,
@@ -997,3 +997,4 @@ async def account_login(bot: Client, m: Message):
  
     
 bot.run()
+
